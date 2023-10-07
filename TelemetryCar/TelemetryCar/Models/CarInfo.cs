@@ -7,6 +7,8 @@ public partial class CarInfo
 {
     public string? LicensePlate { get; set; }
 
+    public long Id { get; set; }
+
     public long ModelId { get; set; }
 
     public int? AmountCharge { get; set; }

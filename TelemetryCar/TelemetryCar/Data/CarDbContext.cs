@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using TelemetryCar.Models;
 
-namespace TelemetryCar.Models;
+namespace TelemetryCar.Data;
 
 public partial class CarDbContext : DbContext
 {
@@ -29,14 +30,17 @@ public partial class CarDbContext : DbContext
 
         modelBuilder.Entity<CarInfo>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("car_info");
+            entity.HasKey(e => e.Id).HasName("car_info_pkey");
+
+            entity.ToTable("car_info");
 
             entity.HasIndex(e => e.LicensePlate, "license_plate_index")
                 .HasMethod("gin")
                 .HasOperators(new[] { "gin_trgm_ops" });
 
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.AmountCharge)
                 .HasDefaultValueSql("0")
                 .HasColumnName("amount_charge");
@@ -63,7 +67,7 @@ public partial class CarDbContext : DbContext
                 .HasDefaultValueSql("15")
                 .HasColumnName("temperature_out");
 
-            entity.HasOne(d => d.Model).WithMany()
+            entity.HasOne(d => d.Model).WithMany(p => p.CarInfos)
                 .HasForeignKey(d => d.ModelId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_model_id");
