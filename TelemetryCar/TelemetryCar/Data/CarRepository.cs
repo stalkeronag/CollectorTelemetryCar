@@ -30,11 +30,16 @@ namespace TelemetryCar.Data
                 Busy = addCarDto.Busy,
                 AmountCharge = addCarDto.AmountCharge,
                 AverageSpeed = addCarDto.AverageSpeed,
-                ModelId = addCarDto.ModelId,
+                ModelId = addCarDto.ModelId
             };
 
             await carDbContext.AddAsync(carInfo);
             await carDbContext.SaveChangesAsync();
+        }
+
+        public async void UpdateCar()
+        {
+
         }
     }
 }
